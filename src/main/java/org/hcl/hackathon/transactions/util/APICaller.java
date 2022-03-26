@@ -35,6 +35,11 @@ public class APICaller {
         executorService.execute(() -> performLazyCall(uuid, dto));
     }
 
+    /**
+     * External call to carry out transaction
+     * @param uuid UUID of the transaction
+     * @param dto transaction details
+     */
     private void performLazyCall(UUID uuid, TransactionDetailsDTO dto) {
         String status;
         try {
@@ -58,6 +63,11 @@ public class APICaller {
         }
     }
 
+    /**
+     * Inform caller about the status of the transaction
+     * @param orderReferenceNumber order reference number
+     * @param status status of the transaction
+     */
     private void informCaller(Integer orderReferenceNumber, String status) {
         LOGGER.info("Push kafka event for order number {} with status {}", orderReferenceNumber, status);
         String queueName = "transaction_update";

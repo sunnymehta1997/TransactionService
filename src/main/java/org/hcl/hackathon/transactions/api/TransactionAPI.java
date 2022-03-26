@@ -24,6 +24,11 @@ public class TransactionAPI {
     @Autowired
     private APICaller caller;
 
+    /**
+     *
+     * @param id orderReferenceId
+     * @return Transaction details
+     */
     @GetMapping(path = "/{id}")
     public TransactionDetailsDTO get(@PathVariable Integer id) {
         TransactionDetailsDTO dto = transactionDetailsServiceImpl.findByOrderReferenceNumber(id);
@@ -33,6 +38,11 @@ public class TransactionAPI {
         return dto;
     }
 
+    /**
+     *
+     * @param orderDTO order details for which transaction need to be carried out
+     * @return UUID of the transaction
+     */
     @PostMapping
     public ResponseEntity<UUID> post(@RequestBody OrderDTO orderDTO) {
         TransactionDetailsDTO dto = new TransactionDetailsDTO();
@@ -44,6 +54,10 @@ public class TransactionAPI {
         return new ResponseEntity<>(uuid, HttpStatus.CREATED);
     }
 
+    /**
+     *
+     * @return String to check if server is live or not
+     */
     @GetMapping(path = "/heartBeat")
     public String doSomething() {
         return "Ok";
