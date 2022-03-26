@@ -11,8 +11,6 @@ public interface TransactionDetailsService {
 
     TransactionDetailsDTO findByOrderReferenceNumber(Integer orderReferenceNumber);
 
-    TransactionDetailsDTO get(final UUID transactionID);
-
     UUID create(final TransactionDetailsDTO transactiondetailsDTO);
 
     void update(final UUID transactionID,

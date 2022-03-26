@@ -31,12 +31,6 @@ public class TransactionDetailsServiceImpl implements TransactionDetailsService 
         return mapToDTO(transactionDetailsRepository.findByOrderReferenceNumber(orderReferenceNumber), new TransactionDetailsDTO());
     }
 
-    public TransactionDetailsDTO get(final UUID transactionID) {
-        return transactionDetailsRepository.findById(transactionID)
-                .map(transactiondetails -> mapToDTO(transactiondetails, new TransactionDetailsDTO()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
     public UUID create(final TransactionDetailsDTO transactiondetailsDTO) {
         final TransactionDetails transactiondetails = new TransactionDetails();
         mapToEntity(transactiondetailsDTO, transactiondetails);
