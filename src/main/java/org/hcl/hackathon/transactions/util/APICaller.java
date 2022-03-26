@@ -32,28 +32,30 @@ public class APICaller {
     }
 
     public void submitRequestForTransaction(UUID uuid, TransactionDetailsDTO dto) {
-        executorService.execute(() -> {
-            String status;
-            try {
-                Thread.sleep(5 * 1000L);//lazy service call
-                int n = new Random().nextInt(100);
-                if(n <= 85) {
-                    status = Status.COMPLETED.name();
-                } else {
-                    status = Status.FAILED.name();
-                }
-                dto.setStatus(status);
-                service.update(uuid, dto);
-                informCaller(dto.getOrderReferenceNumber(), status);
-            } catch (InterruptedException ex) {
-                LOGGER.error("Exception in calling external service");
+        executorService.execute(() -> performLazyCall(uuid, dto));
+    }
+
+    private void performLazyCall(UUID uuid, TransactionDetailsDTO dto) {
+        String status;
+        try {
+            Thread.sleep(5 * 1000L);//lazy service call
+            int n = new Random().nextInt(100);
+            if(n <= 85) {
+                status = Status.COMPLETED.name();
+            } else {
                 status = Status.FAILED.name();
-                dto.setStatus(status);
-                service.update(uuid, dto);
-                informCaller(dto.getOrderReferenceNumber(), status);
-                Thread.currentThread().interrupt();
             }
-        });
+            dto.setStatus(status);
+            service.update(uuid, dto);
+            informCaller(dto.getOrderReferenceNumber(), status);
+        } catch (InterruptedException ex) {
+            LOGGER.error("Exception in calling external service");
+            status = Status.FAILED.name();
+            dto.setStatus(status);
+            service.update(uuid, dto);
+            informCaller(dto.getOrderReferenceNumber(), status);
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void informCaller(Integer orderReferenceNumber, String status) {
