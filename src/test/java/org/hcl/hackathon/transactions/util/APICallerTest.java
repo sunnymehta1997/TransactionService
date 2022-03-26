@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class APICallerTest {
 
     @Mock
