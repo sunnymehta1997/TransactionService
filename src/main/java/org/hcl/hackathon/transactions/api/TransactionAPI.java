@@ -24,11 +24,11 @@ public class TransactionAPI {
     @Autowired
     private APICaller caller;
 
-    @GetMapping
-    public TransactionDetailsDTO get(OrderDTO orderDTO) {
-        TransactionDetailsDTO dto = transactionDetailsServiceImpl.findByOrderReferenceNumber(orderDTO.getOrderReferenceNumber());
-        if(dto == null || !orderDTO.getOrderReferenceNumber().equals(dto.getOrderReferenceNumber())) {
-            throw new TransactionNotFoundException(String.format("'%d' Not found", orderDTO.getOrderReferenceNumber()));
+    @GetMapping(path = "/{id}")
+    public TransactionDetailsDTO get(@PathVariable Integer id) {
+        TransactionDetailsDTO dto = transactionDetailsServiceImpl.findByOrderReferenceNumber(id);
+        if(dto == null || !id.equals(dto.getOrderReferenceNumber())) {
+            throw new TransactionNotFoundException(String.format("'%d' Not found", id));
         }
         return dto;
     }

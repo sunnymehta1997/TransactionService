@@ -37,11 +37,14 @@ public class APICaller {
             try {
                 Thread.sleep(5 * 1000L);//lazy service call
                 int n = new Random().nextInt(100);
-                if(n <= 50) {
+                if(n <= 85) {
                     status = Status.COMPLETED.name();
                 } else {
                     status = Status.FAILED.name();
                 }
+                dto.setStatus(status);
+                service.update(uuid, dto);
+                informCaller(dto.getOrderReferenceNumber(), status);
             } catch (InterruptedException ex) {
                 LOGGER.error("Exception in calling external service");
                 status = Status.FAILED.name();
@@ -57,7 +60,7 @@ public class APICaller {
         LOGGER.info("Push kafka event for order number {} with status {}", orderReferenceNumber, status);
         String queueName = "transaction_update";
         String message = orderReferenceNumber + "|" + status;
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:9101/activemq-service/produce?queueName=" + queueName + "&message=" + message, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:8085/activemq-service/produce?queueName=" + queueName + "&message=" + message, String.class);
         if(!responseEntity.getStatusCode().is2xxSuccessful()) {
             LOGGER.error("Failed to transmit the status {}", responseEntity.getStatusCodeValue());
             LOGGER.error("Response message is {}", responseEntity.getBody());

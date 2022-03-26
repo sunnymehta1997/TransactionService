@@ -45,10 +45,6 @@ public class TransactionDetailsServiceImpl implements TransactionDetailsService 
         transactionDetailsRepository.save(transactiondetails);
     }
 
-    public void delete(final UUID transactionID) {
-        transactionDetailsRepository.deleteById(transactionID);
-    }
-
     private TransactionDetailsDTO mapToDTO(final TransactionDetails transactiondetails,
                                            final TransactionDetailsDTO transactiondetailsDTO) {
         if(transactiondetails == null) {
